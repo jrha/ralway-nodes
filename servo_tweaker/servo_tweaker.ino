@@ -5,26 +5,28 @@ String inputPosition = "";
 bool gotId = false;
 bool gotPosition = false;
 
+#define SERVO_COUNT 6
 
-static int SERVO_PINS[5] = {
+static int SERVO_PINS[SERVO_COUNT] = {
   3,
   5,
   6,
   9,
   10,
+  11,
 };
 
 Servo servo;
 
-
 void moveServo(int id, int pos) {
   // Connect servo, move, wait for move to complete and then disconnect to prevent jittering
-  servo.attach(SERVO_PINS[id]);
-  servo.write(pos);
-  delay(1500);
-  servo.detach();
+  if (id < SERVO_COUNT) {
+    servo.attach(SERVO_PINS[id]);
+    servo.write(pos);
+    delay(1500);
+    servo.detach();
+  }
 }
-
 
 
 void setup() {
@@ -32,7 +34,7 @@ void setup() {
   inputId.reserve(20);
   inputPosition.reserve(20);
   // Reset all servos to mid point
-  for (int i = 0; i < 5; i++) {
+  for (int i = 0; i < SERVO_COUNT; i++) {
     moveServo(i, 90);
   }
 }
@@ -50,7 +52,7 @@ void loop() {
     Serial.println(" |");
 
     moveServo(id, pos);
-    
+
     // clear the inputs and reset states
     inputId = "";
     inputPosition = "";
@@ -63,7 +65,7 @@ void loop() {
 void serialEvent() {
   while (Serial.available()) {
     char inChar = (char)Serial.read();
-    
+
     if (inChar == ' ') {
       gotId = true;
     } else if (inChar == '\n') {
