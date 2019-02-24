@@ -1,36 +1,78 @@
 #include <CMRI.h>
 #include <Servo.h>
 
+#include "bw_yard.h"
+
 /*
  * SMINI (24 inputs, 48 outputs)
  * address = 10
  */
 CMRI cmri(10);
 
-#define SERVO_COUNT 4
+// As we are attaching and detaching servos as required, we only need a single Servo object
+Servo servo;
 
-static uint8_t SERVO_PINS[SERVO_COUNT] = {
-    6,  9, 10, 11,
-};
-static uint8_t SERVO_BITS[SERVO_COUNT] = {
-    1,  2,  3,  4,
-};
-static uint8_t SERVO_OFFSETS[2][SERVO_COUNT] = {
-    {  0,  0,  0,  0 },
-    { 10, 10, 10, 10 },
-};
+// Directly move a servo without limits or speed control
+void moveServo(int id, int pos) {
+    // Connect servo, move, wait for move to complete and then disconnect to prevent jittering
+    if (id < SERVO_COUNT) {
+        servo.attach(SERVOS[id][PIN]);
+        servo.write(pos);
+        delay(1500);
+        servo.detach();
+    }
+}
 
-bool servo_values[SERVO_COUNT] = {
-    false, false, false, false,
-};
+// Flip the state of a servo and slowly change its physical position
+void toggleServo(int id) {
+    if (id < SERVO_COUNT) {
+        int start_pos = SERVOS[id][servo_states[id] + 2];
+        int end_pos = SERVOS[id][(!servo_states[id]) + 2];
 
-Servo servos[SERVO_COUNT];
+        servo.attach(SERVOS[id][PIN]);
+
+        if (start_pos < end_pos) {
+            for (int pos = start_pos; pos <= end_pos; pos++) {
+                servo.write(pos);
+                delay(SERVO_STEP_DELAY);
+            }
+        } else {
+            for (int pos = start_pos; pos >= end_pos; pos--) {
+                servo.write(pos);
+                delay(SERVO_STEP_DELAY);
+            }
+        }
+
+        servo.detach();
+        servo_states[id] != servo_states[id];
+    }
+}
+
+
+// Call toggleServo if the state really has changed
+void updateServo(int id, bool state) {
+    if (state != servo_states[id]) {
+        toggleServo(id);
+    }
+}
 
 
 void setup() {
     Serial.begin(9600, SERIAL_8N2);
+
+    // Configure servo pins and reset servos
     for (int i = 0; i < SERVO_COUNT; i++) {
-        servos[i].attach(SERVO_PINS[i]);
+        moveServo(i, 90);
+    }
+
+    // Configure output pins
+    for (int i = 0; i < OUTPUT_COUNT; i++) {
+        pinMode(OUTPUTS[i][PIN], OUTPUT);
+    }
+
+    // Configure input pins
+    for (int i = 0; i < INPUT_COUNT; i++) {
+        pinMode(INPUTS[i][PIN], INPUT);
     }
 }
 
@@ -38,11 +80,9 @@ void setup() {
 void loop() {
     cmri.process();
 
+    //
     for (int i = 0; i < SERVO_COUNT; i++) {
-        bool v = cmri.get_bit(SERVO_BITS[i]);
-        if (v != servo_values[i]) {
-            servo_values[i] = v;
-            servos[i].write(SERVO_OFFSETS[v][i]);
-        }
+        bool v = cmri.get_bit(SERVOS[i][BIT]);
+        updateServo(i, v);
     }
 }
