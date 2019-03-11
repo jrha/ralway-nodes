@@ -33,16 +33,6 @@ void toggleServo(int id) {
         int start_pos = SERVOS[id][servo_states[id] + 2];
         int end_pos = SERVOS[id][(!servo_states[id]) + 2];
 
-        /*
-        Serial.print("# moving servo ");
-        Serial.print(id);
-        Serial.print(" from ");
-        Serial.print(start_pos);
-        Serial.print(" to ");
-        Serial.print(end_pos);
-        Serial.println(" #");
-        */
-
         servo.attach(SERVOS[id][PIN]);
         digitalWrite(LED_BUILTIN, HIGH);
 
@@ -50,16 +40,12 @@ void toggleServo(int id) {
             for (int pos = start_pos; pos <= end_pos; pos++) {
                 servo.write(pos);
                 digitalWrite(LED_BUILTIN, pos % 2);
-                Serial.print("# ");
-                Serial.println(pos);
                 delay(SERVO_STEP_DELAY);
             }
         } else {
             for (int pos = start_pos; pos >= end_pos; pos--) {
                 servo.write(pos);
                 digitalWrite(LED_BUILTIN, pos % 2);
-                Serial.print("# ");
-                Serial.println(pos);
                 delay(SERVO_STEP_DELAY);
             }
         }
@@ -74,7 +60,6 @@ void toggleServo(int id) {
 // Call toggleServo if the state really has changed
 void updateServo(int id, bool state) {
     if (state != servo_states[id]) {
-        Serial.print("# state changed ");
         toggleServo(id);
     }
 }
