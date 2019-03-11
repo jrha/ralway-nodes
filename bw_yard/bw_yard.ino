@@ -1,13 +1,20 @@
+#include <Auto485.h>
 #include <CMRI.h>
 #include <Servo.h>
 
 #include "bw_yard.h"
 
+#define DE_PIN 2
+#define RE_PIN 2
+
+Auto485 bus(DE_PIN, RE_PIN);
+
+#define CMRI_ADDR 10
+
 /*
  * SMINI (24 inputs, 48 outputs)
- * address = 10
  */
-CMRI cmri(10);
+CMRI cmri(CMRI_ADDR, 24, 48, bus);
 
 // As we are attaching and detaching servos as required, we only need a single Servo object
 Servo servo;
@@ -66,7 +73,7 @@ void updateServo(int id, bool state) {
 
 
 void setup() {
-    Serial.begin(9600, SERIAL_8N2);
+    bus.begin(9600);
 
     // Configure onboard LED for output
     pinMode(LED_BUILTIN, OUTPUT);
