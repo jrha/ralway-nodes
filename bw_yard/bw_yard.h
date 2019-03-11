@@ -37,7 +37,7 @@ static uint8_t OUTPUTS[OUTPUT_COUNT][2] = {
 };
 
 
-#define INPUT_COUNT 8
+#define INPUT_COUNT 9
 // Mapping of CMRI bit to arduino pin number for inputs
 // Normally digital and analog pins are used here
 static uint8_t INPUTS[INPUT_COUNT][2] = {
@@ -48,10 +48,9 @@ static uint8_t INPUTS[INPUT_COUNT][2] = {
     {3, A3},
     {4, A4},
     {5, A5},
-    //{6, A6}, //Analog only, needs manual conversion
-    //{7, A7}, //Analog only, needs manual conversion
-    {8,  2},
-    {9,  3},
+    {6, A6}, //Analog only, needs manual conversion
+    {7, A7}, //Analog only, needs manual conversion
+    {8,  3},
 };
 
 #endif
