@@ -8,10 +8,9 @@ bool gotPosition = false;
 #define SERVO_COUNT 6
 
 static int SERVO_PINS[SERVO_COUNT] = {
-    3,
+    9,
     5,
     6,
-    9,
     10,
     11,
 };
