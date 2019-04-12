@@ -77,7 +77,7 @@ void updateServo(int id, bool state) {
 
 
 void setup() {
-    bus.begin(9600);
+    bus.begin(115200);
 
     // Configure onboard LED for output
     pinMode(LED_BUILTIN, OUTPUT);
