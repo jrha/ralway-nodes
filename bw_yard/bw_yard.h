@@ -43,11 +43,11 @@ static uint8_t OUTPUTS[OUTPUT_COUNT][2] = {
 static uint8_t INPUTS_ANALOG[INPUT_ANALOG_COUNT][3] = {
     // Current Sensors
     // BIT, PIN, THRESHOLD
-    {0, A0, 30},
-    {1, A1, 30},
-    {2, A2, 30},
-    {3, A3, 30},
-    {4, A4, 30},
+    {20, A0, 30},
+    {21, A1, 30},
+    {22, A2, 30},
+    {23, A3, 30},
+    {24, A4, 30},
 };
 
 #define INPUT_DIGITAL_COUNT 5
@@ -56,11 +56,11 @@ static uint8_t INPUTS_ANALOG[INPUT_ANALOG_COUNT][3] = {
 static uint8_t INPUTS_DIGITAL[INPUT_DIGITAL_COUNT][2] = {
     // Position Sensors
     // BIT, PIN
-    {10, A7},
-    {11, A6},
-    {12, A5},
-    {13,  4},
-    {14,  3},
+    {30, A7},
+    {31, A6},
+    {32, A5},
+    {33,  4},
+    {34,  3},
 };
 
 #endif
