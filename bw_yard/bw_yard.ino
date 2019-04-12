@@ -89,8 +89,11 @@ void setup() {
     }
 
     // Configure input pins
-    for (int i = 0; i < INPUT_COUNT; i++) {
-        pinMode(INPUTS[i][PIN], INPUT);
+    for(int i = 0; i < INPUT_DIGITAL_COUNT; i++){
+        pinMode(INPUTS_DIGITAL[i][PIN], INPUT);
+    }
+    for(int i = 0; i < INPUT_ANALOG_COUNT; i++){
+       pinMode(INPUTS_ANALOG[i][PIN], INPUT);
     }
 }
 
@@ -108,8 +111,13 @@ void loop() {
         digitalWrite(OUTPUTS[i][PIN], cmri.get_bit(OUTPUTS[i][BIT]));
     }
 
-    // Update inputs
-    for (int i = 0; i < INPUT_COUNT; i++) {
-        cmri.set_bit(INPUTS[i][BIT], !digitalRead(INPUTS[i][PIN]));
+    // Update analog inputs
+    for (int i = 0; i < INPUT_ANALOG_COUNT; i++) {
+        cmri.set_bit(INPUTS_ANALOG[i][BIT], analogRead(INPUTS_ANALOG[i][PIN]) > INPUTS_ANALOG[i][THRESHOLD]);
+    }
+
+    // Update digital inputs
+    for (int i=0; i < INPUT_DIGITAL_COUNT; i++) {
+        cmri.set_bit(INPUTS_DIGITAL[i][BIT], !digitalRead(INPUTS_DIGITAL[i][PIN]));
     }
 }

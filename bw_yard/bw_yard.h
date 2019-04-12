@@ -4,6 +4,7 @@
 
 #define BIT 0
 #define PIN 1
+#define THRESHOLD 2
 #define CLOSED 2
 #define THROWN 3
 
@@ -17,11 +18,11 @@
 // Normally PWM pins are used here
 static uint8_t SERVOS[SERVO_COUNT][4] = {
     // BIT, PIN, CLOSED, THROWN
-    {0,  5,  90,  70}, // First 3-way point, left-hand route
-    {1,  9,  75, 115}, // First 3-way point, right-hand route
-    {2,  6,  89,  91}, // Second 3-way point, right-hand route
-    {3, 10,  91,  81}, // Second 3-way point, left-hand route
-    {4, 11,  80, 110}, // Yard Stop Signal
+    {0,  9,  90,  70}, // First 3-way point, right-hand route
+    {1,  5,  80, 100}, // First 3-way point, left-hand route
+    {2,  6,  85,  95}, // Second 3-way point, right-hand route
+    {3, 10,  95,  85}, // Second 3-way point, left-hand route
+    {4, 11, 100, 135}, // Yard Stop Signal
 };
 
 
