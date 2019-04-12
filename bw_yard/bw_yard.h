@@ -43,14 +43,14 @@ static uint8_t OUTPUTS[OUTPUT_COUNT][2] = {
 // Mapping of CMRI bit to arduino pin number for inputs
 // These can only be analog inputs
 // Bits should be in the range 20-29
-static uint8_t INPUTS_ANALOG[INPUT_ANALOG_COUNT][3] = {
+static unsigned int INPUTS_ANALOG[INPUT_ANALOG_COUNT][3] = {
     // Current Sensors
     // BIT, PIN, THRESHOLD
-    {20, A0, 30},
-    {21, A1, 30},
-    {22, A2, 30},
-    {23, A3, 30},
-    {24, A4, 30},
+    {20, A0, 600},
+    {21, A1, 600},
+    {22, A2, 600},
+    {23, A3, 600},
+    {24, A4, 600},
 };
 
 #define INPUT_DIGITAL_COUNT 5
