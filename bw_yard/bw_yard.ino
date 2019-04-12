@@ -115,7 +115,7 @@ void loop() {
     for (int i = 0; i < OUTPUT_COUNT; i++) {
         bool state = cmri.get_bit(OUTPUTS[i][BIT]);
         digitalWrite(OUTPUTS[i][PIN], state);
-        cmri.set_bit(SERVOS[i][BIT], state);
+        cmri.set_bit(OUTPUTS[i][BIT], state);
     }
 
     // Update analog inputs
