@@ -4,6 +4,8 @@
 
 #include "bw_yard.h"
 
+//#define DEBUG
+
 #define DE_PIN 2
 #define RE_PIN 2
 
@@ -85,19 +87,35 @@ void setup() {
     // Configure servo pins and reset servos
     for (int i = 0; i < SERVO_COUNT; i++) {
         moveServo(i, 90);
+        #ifdef DEBUG
+            bus.print("Reset servo ");
+            bus.println(i);
+        #endif
     }
 
     // Configure output pins
     for (int i = 0; i < OUTPUT_COUNT; i++) {
         pinMode(OUTPUTS[i][PIN], OUTPUT);
+        #ifdef DEBUG
+            bus.print("Set output mode on pin ");
+            bus.println(OUTPUTS[i][PIN]);
+        #endif
     }
 
     // Configure input pins
     for(int i = 0; i < INPUT_DIGITAL_COUNT; i++){
         pinMode(INPUTS_DIGITAL[i][PIN], INPUT);
+        #ifdef DEBUG
+            bus.print("Set input mode on pin ");
+            bus.println(INPUTS_DIGITAL[i][PIN]);
+        #endif
     }
     for(int i = 0; i < INPUT_ANALOG_COUNT; i++){
        pinMode(INPUTS_ANALOG[i][PIN], INPUT);
+       #ifdef DEBUG
+            bus.print("Set input mode on pin ");
+            bus.println(INPUTS_ANALOG[i][PIN]);
+        #endif
     }
 }
 
@@ -109,6 +127,13 @@ void loop() {
     for (int i = 0; i < SERVO_COUNT; i++) {
         updateServo(i, cmri.get_bit(SERVOS[i][BIT]));
         cmri.set_bit(SERVOS[i][BIT], servo_states[i]);
+        #ifdef DEBUG
+            bus.print("Updated servo ");
+            bus.print(i);
+            bus.print(" from bit ");
+            bus.println(SERVOS[i][BIT]);
+            delay(500);
+        #endif
     }
 
     // Update outputs with feedback
@@ -116,12 +141,36 @@ void loop() {
         bool state = cmri.get_bit(OUTPUTS[i][BIT]);
         digitalWrite(OUTPUTS[i][PIN], state);
         cmri.set_bit(OUTPUTS[i][BIT], state);
+        #ifdef DEBUG
+            bus.print("Updated output ");
+            bus.print(i);
+            bus.print(" on pin ");
+            bus.print(OUTPUTS[i][PIN]);
+            bus.print(" from bit ");
+            bus.println(OUTPUTS[i][BIT]);
+            delay(500);
+        #endif
     }
 
     // Update analog inputs
     for (int i = 0; i < INPUT_ANALOG_COUNT; i++) {
         unsigned int value = analogRead(INPUTS_ANALOG[i][PIN]);
         cmri.set_bit(INPUTS_ANALOG[i][BIT], value > INPUTS_ANALOG[i][THRESHOLD]);
+        #ifdef DEBUG
+            bus.print("Updated analog input ");
+            bus.print(i);
+            bus.print(" on pin ");
+            bus.print(INPUTS_ANALOG[i][PIN]);
+            bus.print(" to bit ");
+            bus.print(INPUTS_ANALOG[i][BIT]);
+            bus.print(" with value ");
+            bus.print(value);
+            bus.print(" -> ");
+            bus.print(value > INPUTS_ANALOG[i][THRESHOLD]);
+            bus.print(" using threshold ");
+            bus.println(INPUTS_ANALOG[i][THRESHOLD]);
+            delay(500);
+        #endif
     }
 
     // Update digital inputs
@@ -135,5 +184,16 @@ void loop() {
         }
 
         cmri.set_bit(INPUTS_DIGITAL[i][BIT], value);
+        #ifdef DEBUG
+            bus.print("Updated digital input ");
+            bus.print(i);
+            bus.print(" on pin ");
+            bus.print(INPUTS_DIGITAL[i][PIN]);
+            bus.print(" to bit ");
+            bus.print(INPUTS_DIGITAL[i][BIT]);
+            bus.print(" with value ");
+            bus.println(value);
+            delay(500);
+        #endif
     }
 }
