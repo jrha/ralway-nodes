@@ -12,9 +12,10 @@ Auto485 bus(DE_PIN, RE_PIN);
 #define CMRI_ADDR 10
 
 /*
- * SMINI (24 inputs, 48 outputs)
+ * Custom Type Node (40 inputs, 20 outputs)
+ * First 20 inputs are reserved for feedback of outputs
  */
-CMRI cmri(CMRI_ADDR, 24, 48, bus);
+CMRI cmri(CMRI_ADDR, 40, 20, bus);
 
 // As we are attaching and detaching servos as required, we only need a single Servo object
 Servo servo;
@@ -101,14 +102,17 @@ void setup() {
 void loop() {
     cmri.process();
 
-    // Update servos
+    // Update servos with feedback
     for (int i = 0; i < SERVO_COUNT; i++) {
         updateServo(i, cmri.get_bit(SERVOS[i][BIT]));
+        cmri.set_bit(SERVOS[i][BIT], servo_states[i]);
     }
 
-    // Update outputs
+    // Update outputs with feedback
     for (int i = 0; i < OUTPUT_COUNT; i++) {
-        digitalWrite(OUTPUTS[i][PIN], cmri.get_bit(OUTPUTS[i][BIT]));
+        bool state = cmri.get_bit(OUTPUTS[i][BIT]);
+        digitalWrite(OUTPUTS[i][PIN], state);
+        cmri.set_bit(SERVOS[i][BIT], state);
     }
 
     // Update analog inputs
