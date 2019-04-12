@@ -26,32 +26,41 @@ static uint8_t SERVOS[SERVO_COUNT][4] = {
 };
 
 
-#define OUTPUT_COUNT 4
+#define OUTPUT_COUNT 3
 // Mapping of CMRI bit to arduino pin number for regular outputs
 // Normally digital pins are used here
 static uint8_t OUTPUTS[OUTPUT_COUNT][2] = {
     // BIT, PIN
-    {5,  4},
-    {6,  7},
-    {7,  8},
-    {8, 12},
+    {10, 7},
+    {11, 8},
+    {12, 12},
 };
 
 
-#define INPUT_COUNT 9
+#define INPUT_ANALOG_COUNT 5
 // Mapping of CMRI bit to arduino pin number for inputs
-// Normally digital and analog pins are used here
-static uint8_t INPUTS[INPUT_COUNT][2] = {
+// These can only be analog inputs
+static uint8_t INPUTS_ANALOG[INPUT_ANALOG_COUNT][3] = {
+    // Current Sensors
+    // BIT, PIN, THRESHOLD
+    {0, A0, 30},
+    {1, A1, 30},
+    {2, A2, 30},
+    {3, A3, 30},
+    {4, A4, 30},
+};
+
+#define INPUT_DIGITAL_COUNT 5
+// Mapping of CMRI bit to arduino pin number for inputs
+// Physically these can be digital or analog inputs, but will all be treated as digital inputs
+static uint8_t INPUTS_DIGITAL[INPUT_DIGITAL_COUNT][2] = {
+    // Position Sensors
     // BIT, PIN
-    {0, A0},
-    {1, A1},
-    {2, A2},
-    {3, A3},
-    {4, A4},
-    {5, A5},
-    {6, A6}, //Analog only, needs manual conversion
-    {7, A7}, //Analog only, needs manual conversion
-    {8,  3},
+    {10, A7},
+    {11, A6},
+    {12, A5},
+    {13,  4},
+    {14,  3},
 };
 
 #endif
