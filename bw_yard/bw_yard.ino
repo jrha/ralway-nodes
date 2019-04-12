@@ -120,11 +120,20 @@ void loop() {
 
     // Update analog inputs
     for (int i = 0; i < INPUT_ANALOG_COUNT; i++) {
-        cmri.set_bit(INPUTS_ANALOG[i][BIT], analogRead(INPUTS_ANALOG[i][PIN]) > INPUTS_ANALOG[i][THRESHOLD]);
+        unsigned int value = analogRead(INPUTS_ANALOG[i][PIN]);
+        cmri.set_bit(INPUTS_ANALOG[i][BIT], value > INPUTS_ANALOG[i][THRESHOLD]);
     }
 
     // Update digital inputs
     for (int i=0; i < INPUT_DIGITAL_COUNT; i++) {
-        cmri.set_bit(INPUTS_DIGITAL[i][BIT], !digitalRead(INPUTS_DIGITAL[i][PIN]));
+        bool value = 0;
+        // Use analog read with a default threshold for analog pins
+        if (INPUTS_DIGITAL[i][PIN] < A0) {
+            value = !digitalRead(INPUTS_DIGITAL[i][PIN]);
+        } else {
+            value = analogRead(INPUTS_DIGITAL[i][PIN]) < 512;
+        }
+
+        cmri.set_bit(INPUTS_DIGITAL[i][BIT], value);
     }
 }
