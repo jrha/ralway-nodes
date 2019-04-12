@@ -16,6 +16,7 @@
 // Mapping of CMRI bit to arduino pin number for servos
 // Limits of servo travel for CLOSED ahead and THROWN positions
 // Normally PWM pins are used here
+// Bits should be in the range 0-9
 static uint8_t SERVOS[SERVO_COUNT][4] = {
     // BIT, PIN, CLOSED, THROWN
     {0,  9,  90,  70}, // First 3-way point, right-hand route
@@ -29,6 +30,7 @@ static uint8_t SERVOS[SERVO_COUNT][4] = {
 #define OUTPUT_COUNT 3
 // Mapping of CMRI bit to arduino pin number for regular outputs
 // Normally digital pins are used here
+// Bits should be in the range 10-19
 static uint8_t OUTPUTS[OUTPUT_COUNT][2] = {
     // BIT, PIN
     {10, 7},
@@ -40,6 +42,7 @@ static uint8_t OUTPUTS[OUTPUT_COUNT][2] = {
 #define INPUT_ANALOG_COUNT 5
 // Mapping of CMRI bit to arduino pin number for inputs
 // These can only be analog inputs
+// Bits should be in the range 20-29
 static uint8_t INPUTS_ANALOG[INPUT_ANALOG_COUNT][3] = {
     // Current Sensors
     // BIT, PIN, THRESHOLD
@@ -53,6 +56,7 @@ static uint8_t INPUTS_ANALOG[INPUT_ANALOG_COUNT][3] = {
 #define INPUT_DIGITAL_COUNT 5
 // Mapping of CMRI bit to arduino pin number for inputs
 // Physically these can be digital or analog inputs, but will all be treated as digital inputs
+// Bits should be in the range 30-39
 static uint8_t INPUTS_DIGITAL[INPUT_DIGITAL_COUNT][2] = {
     // Position Sensors
     // BIT, PIN
