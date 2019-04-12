@@ -12,10 +12,13 @@ Auto485 bus(DE_PIN, RE_PIN);
 #define CMRI_ADDR 10
 
 /*
- * Custom Type Node (40 inputs, 20 outputs)
- * First 20 inputs are reserved for feedback of outputs
+ * SUSIC Node with 2 input cards and 1 output card (48 inputs, 24 outputs)
+ * First 24 inputs are reserved for feedback of outputs
  */
-CMRI cmri(CMRI_ADDR, 40, 20, bus);
+#define SUSIC_CARDS_INPUT 2
+#define SUSIC_CARDS_OUTPUT 1
+#define SUSIC_CARD_BITS 24
+CMRI cmri(CMRI_ADDR, SUSIC_CARDS_INPUT * SUSIC_CARD_BITS, SUSIC_CARDS_OUTPUT * SUSIC_CARD_BITS, bus);
 
 // As we are attaching and detaching servos as required, we only need a single Servo object
 Servo servo;
