@@ -22,6 +22,11 @@ Auto485 bus(DE_PIN, RE_PIN);
 #define SUSIC_CARD_BITS 24
 CMRI cmri(CMRI_ADDR, SUSIC_CARDS_INPUT * SUSIC_CARD_BITS, SUSIC_CARDS_OUTPUT * SUSIC_CARD_BITS, bus);
 
+// Analog Input States
+#define ANALOG_READING_COUNT 8
+int analog_reading_index = 0;
+int analog_readings[INPUT_ANALOG_COUNT][ANALOG_READING_COUNT];
+
 // As we are attaching and detaching servos as required, we only need a single Servo object
 Servo servo;
 
@@ -154,8 +159,24 @@ void loop() {
 
     // Update analog inputs
     for (int i = 0; i < INPUT_ANALOG_COUNT; i++) {
-        unsigned int value = analogRead(INPUTS_ANALOG[i][PIN]);
-        cmri.set_bit(INPUTS_ANALOG[i][BIT], value > INPUTS_ANALOG[i][THRESHOLD]);
+        analog_readings[i][analog_reading_index] = analogRead(INPUTS_ANALOG[i][PIN]);
+
+        analog_reading_index++;
+        if (analog_reading_index >= ANALOG_READING_COUNT) {
+            analog_reading_index = 0;
+        }
+
+        int maxima = -1;
+        int minima = 2048;
+
+        for (int j = 0; j < ANALOG_READING_COUNT; i++) {
+            maxima = max(maxima, analog_readings[i][j]);
+            minima = min(minima, analog_readings[i][j]);
+        }
+
+        int range = maxima - minima;
+        cmri.set_bit(INPUTS_ANALOG[i][BIT], range > INPUTS_ANALOG[i][THRESHOLD]);
+
         #ifdef DEBUG
             bus.print("Updated analog input ");
             bus.print(i);
@@ -163,10 +184,10 @@ void loop() {
             bus.print(INPUTS_ANALOG[i][PIN]);
             bus.print(" to bit ");
             bus.print(INPUTS_ANALOG[i][BIT]);
-            bus.print(" with value ");
-            bus.print(value);
+            bus.print(" with range ");
+            bus.print(range);
             bus.print(" -> ");
-            bus.print(value > INPUTS_ANALOG[i][THRESHOLD]);
+            bus.print(range > INPUTS_ANALOG[i][THRESHOLD]);
             bus.print(" using threshold ");
             bus.println(INPUTS_ANALOG[i][THRESHOLD]);
             delay(500);
