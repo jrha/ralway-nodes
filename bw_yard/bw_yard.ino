@@ -125,9 +125,7 @@ void setup() {
 }
 
 
-void loop() {
-    cmri.process();
-
+void refresh_servos() {
     // Update servos with feedback
     for (int i = 0; i < SERVO_COUNT; i++) {
         updateServo(i, cmri.get_bit(SERVOS[i][BIT]));
@@ -140,7 +138,10 @@ void loop() {
             delay(500);
         #endif
     }
+}
 
+
+void refresh_outputs() {
     // Update outputs with feedback
     for (int i = 0; i < OUTPUT_COUNT; i++) {
         bool state = cmri.get_bit(OUTPUTS[i][BIT]);
@@ -156,7 +157,10 @@ void loop() {
             delay(500);
         #endif
     }
+}
 
+
+void refresh_analog_inputs() {
     // Update analog inputs
     for (int i = 0; i < INPUT_ANALOG_COUNT; i++) {
         analog_readings[i][analog_reading_index] = analogRead(INPUTS_ANALOG[i][PIN]);
@@ -193,7 +197,10 @@ void loop() {
             delay(500);
         #endif
     }
+}
 
+
+void refresh_digital_inputs () {
     // Update digital inputs
     for (int i=0; i < INPUT_DIGITAL_COUNT; i++) {
         bool value = 0;
@@ -217,4 +224,13 @@ void loop() {
             delay(500);
         #endif
     }
+}
+
+
+void loop() {
+    cmri.process();
+    refresh_servos();
+    refresh_outputs();
+    refresh_analog_inputs();
+    refresh_digital_inputs();
 }
