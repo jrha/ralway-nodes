@@ -12,6 +12,7 @@
 #define SERVO_COUNT 5
 
 #define SERVO_STEP_DELAY 50
+#define ANALOG_SAMPLE_INTERVAL 200
 
 // Mapping of CMRI bit to arduino pin number for servos
 // Limits of servo travel for CLOSED ahead and THROWN positions

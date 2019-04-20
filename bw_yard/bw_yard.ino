@@ -132,9 +132,9 @@ void setup() {
 
 
 SIGNAL(TIMER0_COMPA_vect) {
-    // Sample analog inputs once every 200 milliseconds
+    // Sample analog inputs
     unsigned long timestamp = millis();
-    if (timestamp % 200 == 0) {
+    if (timestamp % ANALOG_SAMPLE_INTERVAL == 0) {
         refresh_analog_inputs();
     }
 }
