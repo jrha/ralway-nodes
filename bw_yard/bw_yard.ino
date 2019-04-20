@@ -135,7 +135,6 @@ void refresh_servos() {
             bus.print(i);
             bus.print(" from bit ");
             bus.println(SERVOS[i][BIT]);
-            delay(500);
         #endif
     }
 }
@@ -154,7 +153,6 @@ void refresh_outputs() {
             bus.print(OUTPUTS[i][PIN]);
             bus.print(" from bit ");
             bus.println(OUTPUTS[i][BIT]);
-            delay(500);
         #endif
     }
 }
@@ -194,7 +192,6 @@ void refresh_analog_inputs() {
             bus.print(range > INPUTS_ANALOG[i][THRESHOLD]);
             bus.print(" using threshold ");
             bus.println(INPUTS_ANALOG[i][THRESHOLD]);
-            delay(500);
         #endif
     }
 }
@@ -221,7 +218,6 @@ void refresh_digital_inputs () {
             bus.print(INPUTS_DIGITAL[i][BIT]);
             bus.print(" with value ");
             bus.println(value);
-            delay(500);
         #endif
     }
 }
