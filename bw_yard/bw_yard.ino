@@ -122,6 +122,19 @@ void setup() {
             bus.println(INPUTS_ANALOG[i][PIN]);
         #endif
     }
+
+    // Use a timer interrupt to regularly sample analog inputs
+    OCR0A = 0xAF;
+    TIMSK0 |= _BV(OCIE0A);
+}
+
+
+SIGNAL(TIMER0_COMPA_vect) {
+    // Sample analog inputs once every 200 milliseconds
+    unsigned long timestamp = millis();
+    if (timestamp % 200 == 0) {
+        refresh_analog_inputs();
+    }
 }
 
 
@@ -227,6 +240,5 @@ void loop() {
     cmri.process();
     refresh_servos();
     refresh_outputs();
-    refresh_analog_inputs();
     refresh_digital_inputs();
 }
