@@ -91,10 +91,12 @@ void setup() {
 
     // Configure servo pins and reset servos
     for (int i = 0; i < SERVO_COUNT; i++) {
-        moveServo(i, 90);
+        moveServo(i, SERVOS[i][CLOSED]);
         #ifdef DEBUG
             bus.print("Reset servo ");
-            bus.println(i);
+            bus.print(i);
+            bus.print(" to ");
+            bus.println(SERVOS[i][CLOSED]);
         #endif
     }
 
