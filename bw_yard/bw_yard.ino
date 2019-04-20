@@ -30,9 +30,9 @@ int analog_readings[INPUT_ANALOG_COUNT][ANALOG_READING_COUNT];
 // As we are attaching and detaching servos as required, we only need a single Servo object
 Servo servo;
 
-// State table for servo outputs
-// Used to prevent unnecessary servo activation
-bool servo_states[SERVO_COUNT];
+// Current position of servos
+// Used to gradually move to desired position
+unsigned int servo_positions[SERVO_COUNT];
 
 // Directly move a servo without limits or speed control
 void moveServo(int id, int pos) {
@@ -41,44 +41,8 @@ void moveServo(int id, int pos) {
         servo.attach(SERVOS[id][PIN]);
         servo.write(pos);
         delay(1500);
+        servo_positions[id] = pos;
         servo.detach();
-    }
-}
-
-// Flip the state of a servo and slowly change its physical position
-void toggleServo(int id) {
-    if (id < SERVO_COUNT) {
-        int start_pos = SERVOS[id][servo_states[id] + 2];
-        int end_pos = SERVOS[id][(!servo_states[id]) + 2];
-
-        servo.attach(SERVOS[id][PIN]);
-        digitalWrite(LED_BUILTIN, HIGH);
-
-        if (start_pos < end_pos) {
-            for (int pos = start_pos; pos <= end_pos; pos++) {
-                servo.write(pos);
-                digitalWrite(LED_BUILTIN, pos % 2);
-                delay(SERVO_STEP_DELAY);
-            }
-        } else {
-            for (int pos = start_pos; pos >= end_pos; pos--) {
-                servo.write(pos);
-                digitalWrite(LED_BUILTIN, pos % 2);
-                delay(SERVO_STEP_DELAY);
-            }
-        }
-
-        digitalWrite(LED_BUILTIN, LOW);
-        servo.detach();
-        servo_states[id] = !servo_states[id];
-    }
-}
-
-
-// Call toggleServo if the state really has changed
-void updateServo(int id, bool state) {
-    if (state != servo_states[id]) {
-        toggleServo(id);
     }
 }
 
@@ -125,7 +89,7 @@ void setup() {
         #endif
     }
 
-    // Use a timer interrupt to regularly sample analog inputs
+    // Use a timer interrupt to regularly sample analog inputs and update servo positions
     OCR0A = 0xAF;
     TIMSK0 |= _BV(OCIE0A);
 }
@@ -137,14 +101,30 @@ SIGNAL(TIMER0_COMPA_vect) {
     if (timestamp % ANALOG_SAMPLE_INTERVAL == 0) {
         refresh_analog_inputs();
     }
+
+    // Update servo positions
+    if (timestamp % SERVO_STEP_INTERVAL == 0) {
+        refresh_servos();
+    }
 }
 
 
 void refresh_servos() {
     // Update servos with feedback
     for (int i = 0; i < SERVO_COUNT; i++) {
-        updateServo(i, cmri.get_bit(SERVOS[i][BIT]));
-        cmri.set_bit(SERVOS[i][BIT], servo_states[i]);
+        byte desired_position = SERVOS[i][cmri.get_bit(SERVOS[i][BIT]) + 2];
+        if (servo_positions[i] != desired_position) {
+            if (servo_positions[i] < desired_position) {
+                servo_positions[i]++;
+            } else {
+                servo_positions[i]--;
+            }
+            servo.attach(SERVOS[i][PIN]);
+            servo.write(servo_positions[i]);
+            servo.detach();
+        }
+        cmri.set_bit(SERVOS[i][BIT], servo_positions[i] == desired_position);
+
         #ifdef DEBUG
             bus.print("Updated servo ");
             bus.print(i);
@@ -240,7 +220,6 @@ void refresh_digital_inputs () {
 
 void loop() {
     cmri.process();
-    refresh_servos();
     refresh_outputs();
     refresh_digital_inputs();
 }

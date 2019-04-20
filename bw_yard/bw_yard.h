@@ -11,7 +11,7 @@
 
 #define SERVO_COUNT 5
 
-#define SERVO_STEP_DELAY 50
+#define SERVO_STEP_INTERVAL 50
 #define ANALOG_SAMPLE_INTERVAL 200
 
 // Mapping of CMRI bit to arduino pin number for servos
