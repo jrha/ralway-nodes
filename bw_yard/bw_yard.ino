@@ -107,14 +107,14 @@ void setup() {
     }
 
     // Configure input pins
-    for (int i = 0; i < INPUT_DIGITAL_COUNT; i++){
+    for (int i = 0; i < INPUT_DIGITAL_COUNT; i++) {
         pinMode(INPUTS_DIGITAL[i][PIN], INPUT);
         #ifdef DEBUG
             bus.print("Set input mode on pin ");
             bus.println(INPUTS_DIGITAL[i][PIN]);
         #endif
     }
-    for (int i = 0; i < INPUT_ANALOG_COUNT; i++){
+    for (int i = 0; i < INPUT_ANALOG_COUNT; i++) {
        pinMode(INPUTS_ANALOG[i][PIN], INPUT);
        #ifdef DEBUG
             bus.print("Set input mode on pin ");
