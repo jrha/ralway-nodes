@@ -46,11 +46,21 @@ unsigned int servo_positions[SERVO_COUNT];
 void moveServo(int id, int pos) {
     // Connect servo, move, wait for move to complete and then disconnect to prevent jittering
     if (id < SERVO_COUNT) {
-        servo.attach(SERVOS[id][PIN]);
-        servo.write(pos);
-        delay(1500);
-        servo_positions[id] = pos;
-        servo.detach();
+        if (digitalPinHasPWM(SERVOS[id][PIN])) {
+            servo.attach(SERVOS[id][PIN]);
+            servo.write(pos);
+            delay(1500);
+            servo_positions[id] = pos;
+            servo.detach();
+        } else {
+            // Invalid configuration, stop and flash warning light
+            while (1) {
+                digitalWrite(LED_BUILTIN, HIGH);
+                delay(500);
+                digitalWrite(LED_BUILTIN, LOW);
+                delay(500);
+            }
+        }
     }
 }
 
