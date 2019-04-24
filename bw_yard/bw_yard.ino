@@ -13,8 +13,8 @@ Auto485 bus(RS485_PIN_DE, RS485_PIN_RE);
 #error CMRI node address must be above 0 and below 256
 #endif
 
-#if SUSIC_CARDS_INPUT + SUSIC_CARDS_OUTPUT > 32
-#error Total number of SUSIC cards cannot be more than 32
+#if SUSIC_CARDS_INPUT + SUSIC_CARDS_OUTPUT > 64
+#error Total number of SUSIC cards cannot be more than 64
 #endif
 
 #if SUSIC_CARD_BITS==24 or SUSIC_CARD_BITS==32
