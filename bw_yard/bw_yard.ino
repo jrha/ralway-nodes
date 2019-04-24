@@ -6,24 +6,17 @@
 
 //#define DEBUG
 
-#define DE_PIN 2
-#define RE_PIN 2
+Auto485 bus(RS485_PIN_DE, RS485_PIN_RE);
 
-Auto485 bus(DE_PIN, RE_PIN);
 
-#define CMRI_ADDR 10
 
 /*
  * SUSIC Node with 2 input cards and 1 output card (48 inputs, 24 outputs)
  * First 24 inputs are reserved for feedback of outputs
  */
-#define SUSIC_CARDS_INPUT 2
-#define SUSIC_CARDS_OUTPUT 1
-#define SUSIC_CARD_BITS 24
 CMRI cmri(CMRI_ADDR, SUSIC_CARDS_INPUT * SUSIC_CARD_BITS, SUSIC_CARDS_OUTPUT * SUSIC_CARD_BITS, bus);
 
 // Analog Input States
-#define ANALOG_READING_COUNT 8
 int analog_reading_index = 0;
 int analog_readings[INPUT_ANALOG_COUNT][ANALOG_READING_COUNT];
 
@@ -48,7 +41,7 @@ void moveServo(int id, int pos) {
 
 
 void setup() {
-    bus.begin(115200);
+    bus.begin(RS485_RATE);
 
     // Configure onboard LED for output
     pinMode(LED_BUILTIN, OUTPUT);

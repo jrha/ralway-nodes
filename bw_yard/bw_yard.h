@@ -8,6 +8,9 @@
 #define CLOSED 2
 #define THROWN 3
 
+#define RS485_RATE 115200
+#define RS485_PIN_DE 2
+#define RS485_PIN_RE 2
 
 #define SERVO_COUNT 5
 
@@ -18,6 +21,13 @@
 // Limits of servo travel for CLOSED ahead and THROWN positions
 // Normally PWM pins are used here
 // Bits should be in the range 0-9
+#define ANALOG_READING_COUNT 8
+
+#define CMRI_ADDR 10
+#define SUSIC_CARDS_INPUT 2
+#define SUSIC_CARDS_OUTPUT 1
+#define SUSIC_CARD_BITS 24
+
 static uint8_t SERVOS[SERVO_COUNT][4] = {
     // BIT, PIN, CLOSED, THROWN
     {0,  9,  90,  70}, // First 3-way point, right-hand route
