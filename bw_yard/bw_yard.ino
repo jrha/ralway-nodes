@@ -29,10 +29,10 @@ Auto485 bus(RS485_PIN_DE, RS485_PIN_RE);
 CMRI cmri(CMRI_ADDR, SUSIC_CARDS_INPUT * SUSIC_CARD_BITS, SUSIC_CARDS_OUTPUT * SUSIC_CARD_BITS, bus);
 
 // Analog Input States
-#if ANALOG_READING_COUNT <= 0
-#error ANALOG_READING_COUNT must be at least 1
+#if ANALOG_READING_COUNT <= 0 and ANALOG_READING_COUNT >= 256
+#error ANALOG_READING_COUNT must be between 1 and 255
 #endif
-int analog_reading_index = 0;
+byte analog_reading_index = 0;
 int analog_readings[INPUT_ANALOG_COUNT][ANALOG_READING_COUNT];
 
 // As we are attaching and detaching servos as required, we only need a single Servo object
