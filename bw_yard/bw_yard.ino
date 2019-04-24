@@ -8,15 +8,26 @@
 
 Auto485 bus(RS485_PIN_DE, RS485_PIN_RE);
 
+// Build virtual SUSIC node
+#if CMRI_ADDR <= 0 or CMRI_ADDR >= 256
+#error CMRI node address must be above 0 and below 256
+#endif
 
+#if SUSIC_CARDS_INPUT + SUSIC_CARDS_OUTPUT > 32
+#error Total number of SUSIC cards cannot be more than 32
+#endif
 
-/*
- * SUSIC Node with 2 input cards and 1 output card (48 inputs, 24 outputs)
- * First 24 inputs are reserved for feedback of outputs
- */
+#if SUSIC_CARD_BITS==24 or SUSIC_CARD_BITS==32
+#else
+#error SUSIC_CARD_BITS Must be either 24 or 32
+#endif
+
 CMRI cmri(CMRI_ADDR, SUSIC_CARDS_INPUT * SUSIC_CARD_BITS, SUSIC_CARDS_OUTPUT * SUSIC_CARD_BITS, bus);
 
 // Analog Input States
+#if ANALOG_READING_COUNT <= 0
+#error ANALOG_READING_COUNT must be at least 1
+#endif
 int analog_reading_index = 0;
 int analog_readings[INPUT_ANALOG_COUNT][ANALOG_READING_COUNT];
 
