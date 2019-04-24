@@ -24,7 +24,7 @@ Auto485 bus(RS485_PIN_DE, RS485_PIN_RE);
 
 #if SUSIC_CARD_BITS==24 or SUSIC_CARD_BITS==32
 #else
-#error SUSIC_CARD_BITS Must be either 24 or 32
+#error SUSIC_CARD_BITS Must be either 24 (emulating DIN/DOUT cards) or 32 (emulating DIN32/DOUT32 cards)
 #endif
 
 CMRI cmri(CMRI_ADDR, SUSIC_CARDS_INPUT * SUSIC_CARD_BITS, SUSIC_CARDS_OUTPUT * SUSIC_CARD_BITS, bus);
