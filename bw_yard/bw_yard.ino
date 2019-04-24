@@ -2,6 +2,7 @@
 #include <CMRI.h>
 #include <Servo.h>
 
+#include "bw_yard_metadata.h"
 #include "bw_yard.h"
 
 //#define DEBUG
@@ -70,6 +71,16 @@ void setup() {
 
     // Configure onboard LED for output
     pinMode(LED_BUILTIN, OUTPUT);
+
+    #ifdef DEBUG
+        bus.print("Entered setup, version: ");
+        bus.print(GIT_ID);
+        bus.print(", built: ");
+        bus.print(__DATE__);
+        bus.print(" @ ");
+        bus.print(__TIME__);
+        bus.println(".");
+    #endif
 
     // Configure servo pins and reset servos
     for (int i = 0; i < SERVO_COUNT; i++) {
