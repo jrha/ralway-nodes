@@ -66,6 +66,10 @@ void moveServo(int id, int pos) {
 }
 
 
+#if RS485_RATE != 9600 and RS485_RATE != 19200 and RS485_RATE != 28800 and RS485_RATE != 57600 and RS485_RATE != 115200
+#error The only supported CMRINet baud rates for RS485 are 9600, 19200, 28800, 57600 and 115200
+#endif
+
 void setup() {
     bus.begin(RS485_RATE);
 
