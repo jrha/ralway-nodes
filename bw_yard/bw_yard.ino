@@ -36,8 +36,7 @@ CMRI cmri(CMRI_ADDR, SUSIC_CARDS_INPUT * SUSIC_CARD_BITS, SUSIC_CARDS_OUTPUT * S
 byte analog_reading_index = 0;
 int analog_readings[INPUT_ANALOG_COUNT][ANALOG_READING_COUNT];
 
-// As we are attaching and detaching servos as required, we only need a single Servo object
-Servo servo;
+Servo servos[SERVO_COUNT];
 
 // Current position of servos
 // Used to gradually move to desired position
@@ -48,11 +47,11 @@ void moveServo(int id, int pos) {
     // Connect servo, move, wait for move to complete and then disconnect to prevent jittering
     if (id < SERVO_COUNT) {
         if (digitalPinHasPWM(SERVOS[id][PIN])) {
-            servo.attach(SERVOS[id][PIN]);
-            servo.write(pos);
+            servos[id].attach(SERVOS[id][PIN]);
+            servos[id].write(pos);
             delay(1500);
             servo_positions[id] = pos;
-            servo.detach();
+            servos[id].detach();
         } else {
             // Invalid configuration, stop and flash warning light
             while (1) {
@@ -150,18 +149,20 @@ SIGNAL(TIMER0_COMPA_vect) {
 void refresh_servos() {
     // Update servos with feedback
     for (int i = 0; i < SERVO_COUNT; i++) {
-        byte desired_position = SERVOS[i][cmri.get_bit(SERVOS[i][BIT]) + 2];
+        bool desired_state = cmri.get_bit(SERVOS[i][BIT]);
+        byte desired_position = SERVOS[i][desired_state + 2];
         if (servo_positions[i] != desired_position) {
             if (servo_positions[i] < desired_position) {
                 servo_positions[i]++;
             } else {
                 servo_positions[i]--;
             }
-            servo.attach(SERVOS[i][PIN]);
-            servo.write(servo_positions[i]);
-            servo.detach();
+            servos[i].attach(SERVOS[i][PIN]);
+            servos[i].write(servo_positions[i]);
+        } else {
+            servos[i].detach();
+            cmri.set_bit(SERVOS[i][BIT], desired_state);
         }
-        cmri.set_bit(SERVOS[i][BIT], servo_positions[i] == desired_position);
 
         #ifdef DEBUG
             bus.print("Updated servo ");
