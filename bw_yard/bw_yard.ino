@@ -145,6 +145,7 @@ void refresh_servos() {
         bool desired_state = cmri.get_bit(SERVOS[i][BIT]);
         byte desired_position = SERVOS[i][desired_state + 2];
         if (servo_positions[i] != desired_position) {
+            digitalWrite(LED_BUILTIN, HIGH);
             if (servo_positions[i] < desired_position) {
                 servo_positions[i]++;
             } else {
@@ -152,6 +153,7 @@ void refresh_servos() {
             }
             servos[i].attach(SERVOS[i][PIN]);
             servos[i].write(servo_positions[i]);
+            digitalWrite(LED_BUILTIN, LOW);
         } else {
             servos[i].detach();
             cmri.set_bit(SERVOS[i][BIT], desired_state);
