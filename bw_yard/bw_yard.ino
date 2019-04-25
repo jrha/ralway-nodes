@@ -136,13 +136,6 @@ SIGNAL(TIMER0_COMPA_vect) {
     if (timestamp % ANALOG_SAMPLE_INTERVAL == 0) {
         refresh_analog_inputs();
     }
-
-    // Update servo positions
-    if (timestamp % SERVO_STEP_INTERVAL == 0) {
-        digitalWrite(LED_BUILTIN, HIGH);
-        refresh_servos();
-        digitalWrite(LED_BUILTIN, LOW);
-    }
 }
 
 
@@ -261,4 +254,6 @@ void loop() {
     cmri.process();
     refresh_outputs();
     refresh_digital_inputs();
+    refresh_servos();
+    delay(SERVO_STEP_INTERVAL);
 }
