@@ -140,7 +140,9 @@ SIGNAL(TIMER0_COMPA_vect) {
 
     // Update servo positions
     if (timestamp % SERVO_STEP_INTERVAL == 0) {
+        digitalWrite(LED_BUILTIN, HIGH);
         refresh_servos();
+        digitalWrite(LED_BUILTIN, LOW);
     }
 }
 
