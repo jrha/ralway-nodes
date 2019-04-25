@@ -26,7 +26,7 @@
 /*
  * Intervals (in milliseconds) between servo updates and analog reading runs
  */
-#define SERVO_STEP_INTERVAL 50
+#define SERVO_STEP_INTERVAL 2
 #define ANALOG_SAMPLE_INTERVAL 200
 
 /*
