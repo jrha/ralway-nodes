@@ -207,7 +207,7 @@ void refresh_analog_inputs() {
         }
 
         int range = maxima - minima;
-        cmri.set_bit(INPUTS_ANALOG[i][BIT], range > INPUTS_ANALOG[i][THRESHOLD]);
+        cmri.set_bit(INPUTS_ANALOG[i][BIT], abs(range) > INPUTS_ANALOG[i][THRESHOLD]);
 
         #ifdef DEBUG
             bus.print("Updated analog input ");
