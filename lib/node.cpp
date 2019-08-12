@@ -199,7 +199,7 @@ void refresh_analog_inputs() {
         }
 
         int maxima = -1;
-        int minima = 2048;
+        int minima = 4096;
 
         for (int j = 0; j < ANALOG_READING_COUNT; j++) {
             maxima = max(maxima, analog_readings[i][j]);
