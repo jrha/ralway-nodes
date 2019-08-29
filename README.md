@@ -10,38 +10,42 @@
 
 ### Pinouts and Connections
 
-                          +-----+
-             +------------| USB |------------+
-             |            +-----+            |
-     ∙  B5   | [ ]D13/SCK        MISO/D12[ ] |   B4
-     ∅       | [ ]3.3V           MOSI/D11[ ]~|   B3
-     ∅       | [ ]V.ref     ___    SS/D10[ ]~|   B2
-     ∙  C0   | [ ]A0       / N \       D9[ ]~|   B1
-     ∙  C1   | [ ]A1      /  A  \      D8[ ] |   B0
-     ∙  C2   | [ ]A2      \  N  /      D7[ ] |   D7
-     ∙  C3   | [ ]A3       \_0_/       D6[ ]~|   D6
-     ∙  C4   | [ ]A4/SDA               D5[ ]~|   D5
-     ∙  C5   | [ ]A5/SCL               D4[ ] |   D4
-     ∙       | [ ]A6              INT1/D3[ ]~|   D3
-     ∙       | [ ]A7              INT0/D2[ ] |   D2  MAX485 DE & RE
-     ∙       | [ ]5V                  GND[ ] |     
-     ∅  C6   | [ ]RST                 RST[ ] |   C6  ∅
-     ⏚       | [ ]GND   5V MOSI GND   TX1[ ] |   D0  MAX485 DI
-     ∅       | [ ]Vin   [ ] [ ] [ ]   RX1[ ] |   D1  MAX485 R0
-             |          [ ] [ ] [ ]          |
-             |          MISO SCK RST         |
-             | NANO-V3                       |
-             +-------------------------------+
-         
-         
-             +-------------------------------+
-    D0 ←     | [ ] RO                VCC [ ] |
-    D2 ←     | [ ] RE       MAX        B [ ] |    ∿  RS485 Bus
-    D2 ←     | [ ] DE       485        A [ ] |    ∿  RS485 Bus
-    D1 ←     | [ ] DI                GND [ ] |    ⏚  Common Ground
-             +-------------------------------+
-         
-         
-         
-         ASCII Nano by BusyDucks under Creative Commons Attribution (BY) license
-         http://busyducks.com/ascii-art-arduinos
+It is recommended that the small number of connections between boards are wire-wrapped, although if you were feeling like spending more money you could of course build a PCB.
+
+The reference design assumes that:
+  * The Nano breakout board provides a 5 volt regulator to supply the Nano.
+  * The Max485 board has been designed to be supplied with 5 volts.
+
+
+                             +-----+
+                +------------| USB |------------+
+                |            +-----+            |
+              ∙ | [ ]D13/SCK        MISO/D12[ ] | ∙
+              ∅ | [ ]3.3V           MOSI/D11[ ]~| ∙
+              ∅ | [ ]V.ref     ___    SS/D10[ ]~| ∙
+              ∙ | [ ]A0       / N \       D9[ ]~| ∙
+              ∙ | [ ]A1      /  A  \      D8[ ] | ∙
+              ∙ | [ ]A2      \  N  /      D7[ ] | ∙
+              ∙ | [ ]A3       \_0_/       D6[ ]~| ∙
+              ∙ | [ ]A4/SDA               D5[ ]~| ∙
+              ∙ | [ ]A5/SCL               D4[ ] | ∙
+              ∙ | [ ]A6              INT1/D3[ ]~| ∙
+              ∙ | [ ]A7              INT0/D2[ ] | MAX485 DE & RE
+              ∙ | [ ]5V                  GND[ ] | ⏚
+              ∅ | [ ]RST                 RST[ ] | ∅
+              ⏚ | [ ]GND   5V MOSI GND   TX1[ ] | MAX485 DI
+              ∅ | [ ]Vin   [ ] [ ] [ ]   RX1[ ] | MAX485 R0
+                |          [ ] [ ] [ ]          |
+                |          MISO SCK RST         |
+                | NANO-V3                       |
+                +-------------------------------+
+    
+                +-------------------------------+
+        Nano D0 | [ ] RO                VCC [ ] | +5V
+        Nano D2 | [ ] RE       MAX        B [ ] | ∿  RS485 Bus
+        Nano D2 | [ ] DE       485        A [ ] | ∿  RS485 Bus
+        Nano D1 | [ ] DI                GND [ ] | ⏚  Common Ground
+                +-------------------------------+
+
+
+ASCII Nano by BusyDucks under Creative Commons Attribution (BY) license, see http://busyducks.com/ascii-art-arduinos
